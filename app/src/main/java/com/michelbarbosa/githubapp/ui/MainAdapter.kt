@@ -6,13 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import com.michelbarbosa.githubapp.model.UserDomain
 
 class MainAdapter() : PagingDataAdapter<UserDomain, MainViewHolder>(diffCallback) {
-
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         getItem(position)?.let {
             holder.bind(it)
         }
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         MainViewHolder.create(parent)
 

@@ -1,20 +1,19 @@
 package com.michelbarbosa.githubapp.network.api
 
-import android.database.Observable
-import com.michelbarbosa.githubapp.model.UserDomain
+import com.michelbarbosa.githubapp.model.HeaderParam.PARAM_SINCE
 import com.michelbarbosa.githubapp.network.response.User
-import com.michelbarbosa.githubapp.network.response.UsersResponse
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface GithubApi {
+    companion object {
+        const val LIST_USERS_ENDPOINT = "users"
+    }
 
-    @GET("users")
+    @GET(LIST_USERS_ENDPOINT)
     suspend fun listUsers(
-//        @Query("since") since: Int,
+        @Query(PARAM_SINCE) since: Int,
         @Query("per_page") perPage: Int
     ): Response<List<User>>
 

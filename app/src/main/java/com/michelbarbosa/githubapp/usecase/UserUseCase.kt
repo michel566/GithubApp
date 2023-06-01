@@ -13,13 +13,12 @@ interface ListUsersUseCase {
     data class ListUsersParams(val pagingConfig: PagingConfig)
 }
 
-
 class ListUsersUseCaseImpl @Inject constructor(
     private val repository: UserRepository
-) : PagingUseCase<ListUsersUseCase.ListUsersParams, UserDomain>(), ListUsersUseCase{
+) : PagingUseCase<ListUsersUseCase.ListUsersParams, UserDomain>(), ListUsersUseCase {
 
     override fun createFlowObservable(params: ListUsersUseCase.ListUsersParams): Flow<PagingData<UserDomain>> {
-        return Pager(config = params.pagingConfig){
+        return Pager(config = params.pagingConfig) {
             repository.listUsers(pages = params.pagingConfig.pageSize)
         }.flow
     }

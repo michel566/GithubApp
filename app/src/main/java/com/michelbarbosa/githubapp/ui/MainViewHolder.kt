@@ -11,11 +11,9 @@ class MainViewHolder(
 ) : RecyclerView.ViewHolder(itemBinding.root) {
 
     private val text = itemBinding.tvItem
-
     fun bind(user: UserDomain) {
         text.text = user.login
     }
-
     companion object {
         fun create(parent: ViewGroup): MainViewHolder {
             val itemBinding = ItemMainBinding

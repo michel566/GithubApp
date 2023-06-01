@@ -1,6 +1,7 @@
 package com.michelbarbosa.githubapp.di
 
 import com.michelbarbosa.githubapp.model.HeaderPagingConfig
+import com.michelbarbosa.githubapp.model.UserResultDomain
 import com.michelbarbosa.githubapp.network.response.UsersResponse
 import com.michelbarbosa.githubapp.paging.data.RemoteDataSource
 import com.michelbarbosa.githubapp.remote.UserRemoteDataSourceImpl
@@ -19,6 +20,6 @@ interface RepositoryModule {
     fun bindUserRepository(repositoryImpl: UserRepositoryImpl): UserRepository
 
     @Binds
-    fun bindRemoteDataSource(datasourceImpl: UserRemoteDataSourceImpl): RemoteDataSource<UsersResponse>
+    fun bindRemoteDataSource(datasourceImpl: UserRemoteDataSourceImpl): RemoteDataSource<UserResultDomain?>
 
 }

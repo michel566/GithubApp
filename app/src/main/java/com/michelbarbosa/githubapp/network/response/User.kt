@@ -1,7 +1,6 @@
 package com.michelbarbosa.githubapp.network.response
 
 import com.google.gson.annotations.SerializedName
-import com.michelbarbosa.githubapp.model.UserDomain
 
 data class User(
     @SerializedName("login")
@@ -41,10 +40,3 @@ data class User(
     @SerializedName("site_admin")
     val site_admin: Boolean
 )
-
-fun User.toUserDomain(): UserDomain =
-    UserDomain(
-        id = this.id,
-        login = this.login,
-        avatarUrl = this.avatar_url
-    )
