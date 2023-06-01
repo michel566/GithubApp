@@ -7,13 +7,14 @@
 
     <style name="Theme.GithubApp" parent="Base.Theme.GithubApp" />
 
-    <style name="SearchViewColors" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+    <style name="ThemeOverlay.SearchView" parent="">
+        <item name="android:editTextColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+
+
         <item name="searchHintIcon">@drawable/ic_search</item>
-        <item name="android:textColor">?backgroundColor</item>
-        <item name="android:textColorHint">?backgroundColor</item>
-        <item name="android:tint">?backgroundColor</item>
-        <item name="android:editTextColor">?backgroundColor</item>
-        <item name="backgroundTint">?backgroundColor</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:tint">@color/white</item>
     </style>
 
 </resources>
