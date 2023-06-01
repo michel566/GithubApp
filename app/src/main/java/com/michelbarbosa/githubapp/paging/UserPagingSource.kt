@@ -2,16 +2,14 @@ package com.michelbarbosa.githubapp.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.michelbarbosa.githubapp.model.HeaderPagingConfig
+import com.michelbarbosa.githubapp.model.HeaderParam
+import com.michelbarbosa.githubapp.model.HeaderParam.PARAM_SINCE
 import com.michelbarbosa.githubapp.model.UserDomain
-import com.michelbarbosa.githubapp.network.response.UsersResponse
-import com.michelbarbosa.githubapp.network.response.toUserDomain
+import com.michelbarbosa.githubapp.model.UserResultDomain
 import com.michelbarbosa.githubapp.paging.data.RemoteDataSource
-import kotlin.math.sin
 
 class UserPagingSource(
-    private val dataSource: RemoteDataSource<UsersResponse>,
-//    private val pagingConfig: HeaderPagingConfig,
+    private val dataSource: RemoteDataSource<UserResultDomain?>,
     private val perPage: Int
 ) : PagingSource<Int, UserDomain>() {
 
@@ -24,35 +22,24 @@ class UserPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UserDomain> {
         return try {
-            val since = 1
-            val position = params.key ?: PAGE_INDEX
-            val popularResponse = dataSource.listUsers(since = since, perPage = perPage)
+            val response =
+                dataSource.listUsers(since = HeaderParam.getRandomInitialSince(), perPage = perPage)
 
-            LoadResult.Page(
-                data = popularResponse.users.map { it.toUserDomain() },
-                prevKey = null,
-                nextKey = if (since >= position) position + PAGE_INDEX else null
-            )
+            response?.let { resultDomain ->
+                val prevKey = resultDomain.pagingConfig.prevPage(PARAM_SINCE)
+                val nextKey = resultDomain.pagingConfig.nextPage(PARAM_SINCE)
+                LoadResult.Page(
+                    data = resultDomain.listUser,
+                    prevKey = if (prevKey == 0) null else prevKey,
+                    nextKey = nextKey
+                )
+            } ?: kotlin.run {
+                LoadResult.Error(Exception("No content"))
+            }
 
         } catch (e: Exception) {
             LoadResult.Error(e)
         }
-
-
-//        return try {
-//            val response = dataSource.listUsers(since = pagingConfig.next, perPage = perPage)
-//            LoadResult.Page(
-//                data = response.users.map { it.toUserDomain() },
-//                prevKey = pagingConfig.prev,
-//                nextKey = pagingConfig.next
-//            )
-//        } catch (e: Exception) {
-//            LoadResult.Error(e)
-//        }
-    }
-
-    companion object {
-        private const val PAGE_INDEX = 1
     }
 
 }
