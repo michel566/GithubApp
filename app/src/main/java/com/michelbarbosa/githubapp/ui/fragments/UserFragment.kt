@@ -1,5 +1,6 @@
 package com.michelbarbosa.githubapp.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.michelbarbosa.githubapp.databinding.FragmentUserBinding
 import com.michelbarbosa.githubapp.model.UserDomain
-import com.michelbarbosa.githubapp.ui.UserAdapter
+import com.michelbarbosa.githubapp.ui.callbacks.MainCallback
+import com.michelbarbosa.githubapp.ui.fragments.adapter.user.UserAdapter
 import com.michelbarbosa.githubapp.ui.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -26,6 +28,19 @@ class UserFragment : Fragment() {
     private lateinit var userAdapter: UserAdapter
     private val viewModel: UserViewModel by viewModels()
 
+    private lateinit var callback: MainCallback
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        if (requireActivity() is MainCallback)
+            callback = requireActivity() as MainCallback
+        else
+            throw Exception("Activity must be implement MainCallback")
+
+        callback.onAttachedUserFragment(this)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,6 +51,10 @@ class UserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadData()
+    }
+
+    fun loadData() {
         initAdapter()
         fetchListUsers()
     }
@@ -61,8 +80,29 @@ class UserFragment : Fragment() {
         }
     }
 
-    private fun goToUserRepository(user: UserDomain){
+    private fun goToUserRepository(user: UserDomain) {
         Toast.makeText(requireContext(), "id = ${user.id}", Toast.LENGTH_SHORT).show()
+    }
+
+    fun onQueryTextChange(text: CharSequence) {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.filterUsers(
+                    matchItensFound = userAdapter.itemCount,
+                    charArray = text,
+                    onFilterData = { filteredData ->
+                        lifecycleScope.launch {
+                            userAdapter.submitData(filteredData)
+                        }
+                    },
+                    onEmptyData = { singleData ->
+                        lifecycleScope.launch {
+                            userAdapter.submitData(singleData)
+                        }
+                    }
+                )
+            }
+        }
     }
 
 }

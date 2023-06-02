@@ -1,4 +1,4 @@
-package com.michelbarbosa.githubapp.ui
+package com.michelbarbosa.githubapp.ui.fragments.adapter.user
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -1,4 +1,4 @@
-package com.michelbarbosa.githubapp.ui
+package com.michelbarbosa.githubapp.ui.fragments.adapter.user
 
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter

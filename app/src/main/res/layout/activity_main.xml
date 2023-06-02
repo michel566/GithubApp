@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity">
+    tools:context=".ui.activity.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/appbar"
@@ -20,44 +20,20 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?colorPrimary"
+            android:theme="@style/ThemeOverlay.SearchView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/search_item">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
-                android:textColor="@color/white"
                 android:textSize="20sp" />
 
         </androidx.appcompat.widget.Toolbar>
-
-<!--        <androidx.appcompat.widget.AppCompatImageView-->
-<!--            android:id="@+id/iv_search"-->
-<!--            android:layout_width="50dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:padding="10dp"-->
-<!--            android:src="@drawable/ic_search"-->
-<!--            android:tint="?backgroundColor"-->
-<!--            app:layout_constraintBottom_toBottomOf="@+id/toolbar"-->
-<!--            app:layout_constraintEnd_toEndOf="@+id/toolbar"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/toolbar" />-->
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/sv_users"
-            style="@style/SearchViewColors"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?colorPrimary"
-            android:layoutDirection="rtl"
-            android:visibility="gone"
-            app:closeIcon="@drawable/ic_close"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:queryHint="Search movie"
-            app:searchIcon="@drawable/ic_search" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
