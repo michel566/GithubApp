@@ -59,7 +59,10 @@ class MainActivity : AppCompatActivity(), MainCallback {
 
                 override fun onQueryTextChange(newText: String?): Boolean {
                     newText?.let { text ->
-                        userFragment.onChangeText(text)
+                        if (text.isNotEmpty())
+                            userFragment.onQueryTextChange(text)
+                        else
+                            userFragment.loadData()
                     }
                     return false
                 }

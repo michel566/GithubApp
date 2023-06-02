@@ -1,10 +1,11 @@
-package com.michelbarbosa.githubapp.usecase
+package com.michelbarbosa.githubapp.usecase.listusers
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.michelbarbosa.githubapp.model.UserDomain
 import com.michelbarbosa.githubapp.repository.UserRepository
+import com.michelbarbosa.githubapp.usecase.PagingUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

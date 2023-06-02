@@ -51,6 +51,10 @@ class UserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadData()
+    }
+
+    fun loadData() {
         initAdapter()
         fetchListUsers()
     }
@@ -80,9 +84,25 @@ class UserFragment : Fragment() {
         Toast.makeText(requireContext(), "id = ${user.id}", Toast.LENGTH_SHORT).show()
     }
 
-    fun onChangeText(text: String) {
-        Toast.makeText(requireContext(), "text = $text", Toast.LENGTH_SHORT).show()
+    fun onQueryTextChange(text: CharSequence) {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.filterUsers(
+                    matchItensFound = userAdapter.itemCount,
+                    charArray = text,
+                    onFilterData = { filteredData ->
+                        lifecycleScope.launch {
+                            userAdapter.submitData(filteredData)
+                        }
+                    },
+                    onEmptyData = { singleData ->
+                        lifecycleScope.launch {
+                            userAdapter.submitData(singleData)
+                        }
+                    }
+                )
+            }
+        }
     }
-
 
 }
