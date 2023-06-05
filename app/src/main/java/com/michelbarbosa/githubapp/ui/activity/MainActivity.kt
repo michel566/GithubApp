@@ -54,6 +54,11 @@ class MainActivity : AppCompatActivity(), MainCallback {
         search.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        if (it.isNotEmpty())
+                            userFragment.onQueryTextSubmit(it)
+                    }
+
                     return false
                 }
 

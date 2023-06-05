@@ -20,8 +20,14 @@ interface GithubApi {
     ): Response<List<User>>
 
     @GET("$USER_ENDPOINT/{username}")
-    suspend fun getUser(
+    suspend fun getUserDetail(
         @Path("username") userName: String
     ): UserDetail
+
+    @GET("$USER_ENDPOINT/{username}")
+    suspend fun findUser(
+        @Path("username") userName: String
+    ): Response<UserDetail>
+
 
 }

@@ -22,11 +22,11 @@ class UserRepositoryImpl @Inject constructor(
             perPage = pages
         )
 
-    override suspend fun getUserDetail(userName: String): UserDetailDomain =
-        api.getUser(userName).toUserDetailDomain()
+    override suspend fun getUserDetail(userName: String) =
+        api.getUserDetail(userName).toUserDetailDomain()
 
     override suspend fun findUser(userName: String) =
-        api.getUser(userName).toUserDomain()
+        api.findUser(userName)
 
 
 }
