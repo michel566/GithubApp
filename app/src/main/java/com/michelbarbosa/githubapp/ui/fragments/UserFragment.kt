@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.michelbarbosa.githubapp.R
 import com.michelbarbosa.githubapp.databinding.FragmentUserBinding
 import com.michelbarbosa.githubapp.model.UserDomain
 import com.michelbarbosa.githubapp.ui.callbacks.MainCallback
@@ -59,16 +62,6 @@ class UserFragment : Fragment() {
         fetchListUsers()
     }
 
-    private fun fetchListUsers() {
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.listUsers().collectLatest { pagingData ->
-                    userAdapter.submitData(pagingData)
-                }
-            }
-        }
-    }
-
     private fun initAdapter() {
         userAdapter = UserAdapter(::goToUserRepository)
         val linearLayoutManager = LinearLayoutManager(requireContext())
@@ -80,29 +73,85 @@ class UserFragment : Fragment() {
         }
     }
 
+    private fun fetchListUsers() {
+        binding.errorLayout.isVisible = false
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.listUsers().collectLatest { pagingData ->
+                    userAdapter.submitData(pagingData)
+                }
+            }
+        }
+    }
+
     private fun goToUserRepository(user: UserDomain) {
         Toast.makeText(requireContext(), "id = ${user.id}", Toast.LENGTH_SHORT).show()
     }
 
     fun onQueryTextChange(text: CharSequence) {
+        binding.errorLayout.isVisible = false
+
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.filterUsers(
                     matchItensFound = userAdapter.itemCount,
                     charArray = text,
-                    onFilterData = { filteredData ->
-                        lifecycleScope.launch {
-                            userAdapter.submitData(filteredData)
-                        }
-                    },
-                    onEmptyData = { singleData ->
-                        lifecycleScope.launch {
-                            userAdapter.submitData(singleData)
-                        }
+                    onFilterData = (::submitOnAdapter),
+                    onFindUserSuccess = (::submitOnAdapter),
+                    onFindUserEmpty = {
+                        setErrorScreen(
+                            errorMessage = getString(R.string.user_search_empty_error),
+                            onTryAgainListener = {
+                                onQueryTextChange(text)
+                            }
+                        )
                     }
                 )
             }
         }
     }
+
+    fun onQueryTextSubmit(text: String) {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.findUser(
+                    charArray = text,
+                    onFindUserSuccess = (::submitOnAdapter),
+                    onFindUserEmpty = {
+                        setErrorScreen(
+                            errorMessage = getString(R.string.user_search_empty_error),
+                            onTryAgainListener = null
+                        )
+                    }
+                )
+            }
+        }
+    }
+
+    private fun submitOnAdapter(userDetail: PagingData<UserDomain>){
+        lifecycleScope.launch {
+            userAdapter.submitData(userDetail)
+        }
+    }
+
+    private fun setErrorScreen(
+        errorMessage: String?,
+        onTryAgainListener: (() -> Unit)?
+    ) =
+        with(binding) {
+            errorMessage?.let {
+                errorLayout.isVisible = true
+                errorLayout.setText(it)
+            } ?: kotlin.run {
+                errorLayout.isVisible = false
+            }
+
+            onTryAgainListener?.run {
+                errorLayout.setOnClickListener {
+                    invoke()
+                }
+            }
+        }
 
 }
