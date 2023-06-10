@@ -15,6 +15,20 @@
         android:id="@+id/userFragment"
         android:name="com.michelbarbosa.githubapp.ui.fragments.UserFragment"
         android:label="fragment_users"
-        tools:layout="@layout/fragment_user" />
+        tools:layout="@layout/fragment_user" >
+        <action
+            android:id="@+id/action_userFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userDetailFragment"
+        android:name="com.michelbarbosa.githubapp.ui.fragments.UserDetailFragment"
+        android:label="fragment_user_detail"
+        tools:layout="@layout/fragment_user_detail" >
+        <argument
+            android:name="userDataWrapper"
+            app:argType="com.michelbarbosa.githubapp.model.UserDataWrapper" />
+    </fragment>
 
 </navigation>
