@@ -47,6 +47,7 @@ class UserDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainActivity.closeSearch()
         mainActivity.onBackPressedDispatcher.addCallback {
             mainActivity.setupToolbarTitle(getString(R.string.app_name))
             findNavController().popBackStack()

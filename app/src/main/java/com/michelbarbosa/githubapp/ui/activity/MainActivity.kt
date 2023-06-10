@@ -57,6 +57,8 @@ class MainActivity : AppCompatActivity(), MainCallback {
                     query?.let {
                         if (it.isNotEmpty())
                             userFragment.onQueryTextSubmit(it)
+                        else
+                            userFragment.loadData()
                     }
 
                     return false
@@ -75,6 +77,13 @@ class MainActivity : AppCompatActivity(), MainCallback {
         )
     }
 
+    fun closeSearch() {
+        if (!search.isIconified) {
+            search.clearFocus()
+            search.isIconified = true
+        }
+    }
+
     fun setupToolbarTitle(text: String) {
         binding.tvTitle.isVisible = true
         binding.tvTitle.text = text
@@ -83,5 +92,4 @@ class MainActivity : AppCompatActivity(), MainCallback {
     override fun onAttachedUserFragment(fragment: UserFragment) {
         userFragment = fragment
     }
-
 }
