@@ -5,17 +5,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.michelbarbosa.githubapp.R
 import com.michelbarbosa.githubapp.databinding.FragmentUserBinding
+import com.michelbarbosa.githubapp.model.UserDataWrapper
 import com.michelbarbosa.githubapp.model.UserDomain
 import com.michelbarbosa.githubapp.ui.callbacks.MainCallback
 import com.michelbarbosa.githubapp.ui.fragments.adapter.user.UserAdapter
@@ -30,7 +31,6 @@ class UserFragment : Fragment() {
     private lateinit var binding: FragmentUserBinding
     private lateinit var userAdapter: UserAdapter
     private val viewModel: UserViewModel by viewModels()
-
     private lateinit var callback: MainCallback
 
     override fun onAttach(context: Context) {
@@ -63,7 +63,7 @@ class UserFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        userAdapter = UserAdapter(::goToUserRepository)
+        userAdapter = UserAdapter(::goToUserDetail)
         val linearLayoutManager = LinearLayoutManager(requireContext())
         with(binding.rvUsers) {
             scrollToPosition(0)
@@ -71,6 +71,17 @@ class UserFragment : Fragment() {
             setHasFixedSize(true)
             adapter = userAdapter
         }
+    }
+
+    private fun goToUserDetail(user: UserDomain) {
+        findNavController().navigate(
+            UserFragmentDirections.actionUserFragmentToUserDetailFragment(
+                UserDataWrapper(
+                    login = user.login,
+                    userDetail = viewModel.userDetailDomain
+                )
+            )
+        )
     }
 
     private fun fetchListUsers() {
@@ -83,10 +94,6 @@ class UserFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun goToUserRepository(user: UserDomain) {
-        Toast.makeText(requireContext(), "id = ${user.id}", Toast.LENGTH_SHORT).show()
     }
 
     fun onQueryTextChange(text: CharSequence) {

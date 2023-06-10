@@ -1,18 +1,22 @@
 package com.michelbarbosa.githubapp.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class UserDetailDomain(
     val id: Int,
     val login: String,
     val avatarUrl: String,
     val name: String,
-    val company: String = "",
+    val company: String,
     val location: String,
-    val email: String? = "",
-    val bio: String? = "",
-    val twitterUsername: String? = "",
-    val publicRepos: Int = 0,
-    val publicGists: Int = 0,
-    val followers: Int = 0,
+    val email: String,
+    val bio: String,
+    val twitterUsername: String,
+    val publicRepos: Int,
+    val publicGists: Int,
+    val followers: Int,
     val createdAt: String,
     val updatedAt: String
-)
+): Parcelable

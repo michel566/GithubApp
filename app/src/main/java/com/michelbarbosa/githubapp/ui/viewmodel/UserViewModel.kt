@@ -6,7 +6,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import com.michelbarbosa.githubapp.model.UserDetailDomain
 import com.michelbarbosa.githubapp.model.UserDomain
+import com.michelbarbosa.githubapp.network.response.UserDetail
+import com.michelbarbosa.githubapp.network.response.toUserDetailDomain
 import com.michelbarbosa.githubapp.network.response.toUserDomain
 import com.michelbarbosa.githubapp.usecase.finduser.FindUserUseCase
 import com.michelbarbosa.githubapp.usecase.getuserdetail.GetUserDetailUseCase
@@ -22,6 +25,8 @@ class UserViewModel @Inject constructor(
     private val getUserDetailUseCase: GetUserDetailUseCase,
     private val findUserUseCase: FindUserUseCase
 ): ViewModel() {
+
+    var userDetailDomain: UserDetailDomain? = null
 
     fun listUsers(): Flow<PagingData<UserDomain>> =
         listUsersUseCase.invoke(
@@ -44,6 +49,7 @@ class UserViewModel @Inject constructor(
         findUserUseCase.invoke(charArray.toString()).let { findUserResponse ->
             if (findUserResponse.isSuccessful) {
                 findUserResponse.body()?.let { userDetail ->
+                    userDetailDomain = userDetail.toUserDetailDomain()
                     onFindUserSuccess.invoke(
                         PagingData.from(listOf(userDetail.toUserDomain()))
                     )

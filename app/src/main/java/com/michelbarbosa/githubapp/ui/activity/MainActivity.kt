@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), MainCallback {
 
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
     private lateinit var search: SearchView
 
     private lateinit var userFragment: UserFragment
@@ -73,6 +73,11 @@ class MainActivity : AppCompatActivity(), MainCallback {
                 }
             }
         )
+    }
+
+    fun setupToolbarTitle(text: String) {
+        binding.tvTitle.isVisible = true
+        binding.tvTitle.text = text
     }
 
     override fun onAttachedUserFragment(fragment: UserFragment) {

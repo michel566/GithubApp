@@ -6,4 +6,15 @@
     <string name="user_search_empty_error">No logins found</string>
     <string name="user_search_notfound_error">Not users found</string>
     <string name="user_search_generic_error">For some reason we cannot find the login, click below to try again</string>
+
+    <string name="user_detail_name">Name: %s</string>
+    <string name="user_detail_email">Email: %s</string>
+    <string name="user_detail_company">Company: %s</string>
+    <string name="user_detail_p_repository">Public repositories: %d</string>
+    <string name="user_detail_p_gists">Public gists: %d</string>
+    <string name="user_detail_twitter_username">Twitter username: %s</string>
+    <string name="user_detail_followers">Followers: %d</string>
+    <string name="user_detail_created_at">Created at: %s</string>
+    <string name="user_detail_updated_at">Updated at: %s</string>
+
 </resources>

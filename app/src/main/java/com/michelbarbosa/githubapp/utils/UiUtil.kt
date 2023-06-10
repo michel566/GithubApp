@@ -5,7 +5,7 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.michelbarbosa.githubapp.R
 
-object UiUtils {
+object UiUtil {
 
     fun setupImage(context: Context, srcImage: String, view: ImageView){
         Glide.with(context)

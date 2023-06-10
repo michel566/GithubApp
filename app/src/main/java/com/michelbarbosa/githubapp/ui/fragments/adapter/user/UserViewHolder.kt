@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.michelbarbosa.githubapp.databinding.ItemUserBinding
 import com.michelbarbosa.githubapp.model.UserDomain
-import com.michelbarbosa.githubapp.utils.UiUtils
+import com.michelbarbosa.githubapp.utils.UiUtil
 
 class UserViewHolder(
     itemBinding: ItemUserBinding,
@@ -16,7 +16,7 @@ class UserViewHolder(
     private val image = itemBinding.ivImage
 
     fun bind(user: UserDomain) {
-        UiUtils.setupImage(itemView.context, user.avatarUrl, image)
+        UiUtil.setupImage(itemView.context, user.avatarUrl, image)
         text.text = user.login
 
         itemView.setOnClickListener {
