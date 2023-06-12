@@ -5,10 +5,12 @@ import com.michelbarbosa.githubapp.model.UserDetailDomain
 import com.michelbarbosa.githubapp.model.UserDomain
 import com.michelbarbosa.githubapp.model.UserResultDomain
 import com.michelbarbosa.githubapp.network.api.GithubApi
+import com.michelbarbosa.githubapp.network.response.GitRepository
 import com.michelbarbosa.githubapp.network.response.toUserDetailDomain
 import com.michelbarbosa.githubapp.network.response.toUserDomain
 import com.michelbarbosa.githubapp.paging.UserPagingSource
 import com.michelbarbosa.githubapp.paging.data.RemoteDataSource
+import retrofit2.Response
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -28,5 +30,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun findUser(userName: String) =
         api.findUser(userName)
 
+    override suspend fun listUserRepositories(userName: String) =
+        api.listUserRepositories(userName)
 
 }

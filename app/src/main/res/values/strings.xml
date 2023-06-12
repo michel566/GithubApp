@@ -17,4 +17,9 @@
     <string name="user_detail_created_at">Created at: %s</string>
     <string name="user_detail_updated_at">Updated at: %s</string>
 
+    <string name="repos_forks">Forks: %d</string>
+    <string name="repos_created_at">Created date: %s</string>
+    <string name="repos_updated_at">Last updated in %s</string>
+    <string name="repos_pushed_at">Last push: %s</string>
+
 </resources>

@@ -1,6 +1,7 @@
 package com.michelbarbosa.githubapp.network.api
 
 import com.michelbarbosa.githubapp.model.HeaderParam.PARAM_SINCE
+import com.michelbarbosa.githubapp.network.response.GitRepository
 import com.michelbarbosa.githubapp.network.response.User
 import com.michelbarbosa.githubapp.network.response.UserDetail
 import retrofit2.Response
@@ -29,5 +30,9 @@ interface GithubApi {
         @Path("username") userName: String
     ): Response<UserDetail>
 
+    @GET("$USER_ENDPOINT/{username}/repos")
+    suspend fun listUserRepositories(
+        @Path("username") userName: String
+    ): Response<List<GitRepository>>
 
 }
