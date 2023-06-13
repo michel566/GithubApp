@@ -15,10 +15,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.michelbarbosa.githubapp.R
 import com.michelbarbosa.githubapp.databinding.FragmentUserDetailBinding
+import com.michelbarbosa.githubapp.model.GitRepositoryDomain
 import com.michelbarbosa.githubapp.model.UserDetailDomain
 import com.michelbarbosa.githubapp.ui.activity.MainActivity
+import com.michelbarbosa.githubapp.ui.fragments.adapter.repository.RepositoryAdapter
 import com.michelbarbosa.githubapp.ui.viewmodel.UserViewModel
 import com.michelbarbosa.githubapp.utils.UiUtil.setupImage
 import com.michelbarbosa.githubapp.utils.Util
@@ -32,8 +35,6 @@ class UserDetailFragment : Fragment() {
     private val userViewModel: UserViewModel by viewModels()
 
     private lateinit var binding: FragmentUserDetailBinding
-
-    //    private lateinit var reposAdapter: RepositoryAdapter
     private lateinit var mainActivity: MainActivity
 
     override fun onAttach(context: Context) {
@@ -86,6 +87,7 @@ class UserDetailFragment : Fragment() {
     private fun setupWidgets(user: UserDetailDomain) = with(binding) {
         user.apply {
             mainActivity.setupToolbarTitle(login)
+            loadRepositories(login)
             setupImage(requireContext(), avatarUrl, ivImage)
             setTextView(tvName, R.string.user_detail_name, name)
             setTextView(tvEmail, R.string.user_detail_email, email)
@@ -97,6 +99,30 @@ class UserDetailFragment : Fragment() {
             setTextView(tvCreatedAt, R.string.user_detail_created_at, Util.normalizePatternDate(createdAt))
             setTextView(tvUpdatedAt, R.string.user_detail_updated_at, Util.normalizePatternDate(updatedAt))
         }
+    }
+
+    private fun loadRepositories(login: String) {
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle
+                .repeatOnLifecycle(Lifecycle.State.STARTED){
+                    userViewModel.listRepositories(
+                        userName = login,
+                        onListRepositories = ::initAdapter,
+                        onListEmpty = {}
+                    )
+                }
+        }
+    }
+
+    private fun initAdapter(repositories: List<GitRepositoryDomain>) {
+        val reposAdapter = RepositoryAdapter()
+        with(binding.rvRepositories){
+            scrollToPosition(0)
+            layoutManager = LinearLayoutManager(requireContext())
+            setHasFixedSize(true)
+            adapter = reposAdapter
+        }
+        reposAdapter.submitList(repositories)
     }
 
     private fun setTextView(view: TextView, resText: Int, data: String?){

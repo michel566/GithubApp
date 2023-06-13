@@ -6,13 +6,15 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import com.michelbarbosa.githubapp.model.GitRepositoryDomain
 import com.michelbarbosa.githubapp.model.UserDetailDomain
 import com.michelbarbosa.githubapp.model.UserDomain
-import com.michelbarbosa.githubapp.network.response.UserDetail
+import com.michelbarbosa.githubapp.network.response.toDomain
 import com.michelbarbosa.githubapp.network.response.toUserDetailDomain
 import com.michelbarbosa.githubapp.network.response.toUserDomain
 import com.michelbarbosa.githubapp.usecase.finduser.FindUserUseCase
 import com.michelbarbosa.githubapp.usecase.getuserdetail.GetUserDetailUseCase
+import com.michelbarbosa.githubapp.usecase.listrepositories.ListUserRepositoriesUseCase
 import com.michelbarbosa.githubapp.usecase.listusers.ListUsersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +25,8 @@ import javax.inject.Inject
 class UserViewModel @Inject constructor(
     private val listUsersUseCase: ListUsersUseCase,
     private val getUserDetailUseCase: GetUserDetailUseCase,
-    private val findUserUseCase: FindUserUseCase
+    private val findUserUseCase: FindUserUseCase,
+    private val listUserRepositoriesUseCase: ListUserRepositoriesUseCase
 ): ViewModel() {
 
     var userDetailDomain: UserDetailDomain? = null
@@ -90,5 +93,24 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    suspend fun listRepositories(
+        userName: String,
+        onListRepositories: (List<GitRepositoryDomain>) -> Unit,
+        onListEmpty: () -> Unit
+    ) {
+        listUserRepositoriesUseCase.invoke(userName).let { response ->
+            if (response.isSuccessful) {
+                response.body()?.let { list ->
+                    onListRepositories.invoke(
+                        list.map { itemResponse -> itemResponse.toDomain() }
+                    )
+                } ?: kotlin.run {
+                    onListEmpty.invoke()
+                }
+            } else {
+                onListEmpty.invoke()
+            }
+        }
+    }
 
 }
