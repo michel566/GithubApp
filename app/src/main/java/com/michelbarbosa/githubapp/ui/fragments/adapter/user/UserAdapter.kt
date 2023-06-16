@@ -1,18 +1,20 @@
-package com.michelbarbosa.githubapp.ui
+package com.michelbarbosa.githubapp.ui.fragments.adapter.user
 
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.michelbarbosa.githubapp.model.UserDomain
 
-class MainAdapter() : PagingDataAdapter<UserDomain, MainViewHolder>(diffCallback) {
-    override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
+class UserAdapter(
+    private val userCallback: ((user: UserDomain) -> Unit)
+) : PagingDataAdapter<UserDomain, UserViewHolder>(diffCallback) {
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         getItem(position)?.let {
             holder.bind(it)
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        MainViewHolder.create(parent)
+        UserViewHolder.create(parent, userCallback)
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<UserDomain>() {

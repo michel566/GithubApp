@@ -5,7 +5,7 @@ import com.michelbarbosa.githubapp.model.HeaderParam.PARAM_LINK
 import com.michelbarbosa.githubapp.model.UserDomain
 import com.michelbarbosa.githubapp.model.UserResultDomain
 import com.michelbarbosa.githubapp.network.api.GithubApi
-import com.michelbarbosa.githubapp.network.api.GithubApi.Companion.LIST_USERS_ENDPOINT
+import com.michelbarbosa.githubapp.network.api.GithubApi.Companion.USER_ENDPOINT
 import com.michelbarbosa.githubapp.network.response.UsersResponse
 import com.michelbarbosa.githubapp.paging.data.RemoteDataSource
 import javax.inject.Inject
@@ -31,7 +31,7 @@ class UserRemoteDataSourceImpl @Inject constructor(
                 UserResultDomain(
                     pagingConfig = HeaderPagingConfig(
                         link = headers[PARAM_LINK],
-                        endpoint = LIST_USERS_ENDPOINT
+                        endpoint = USER_ENDPOINT
                     ),
                     listUser = listDomain
                 )
@@ -40,4 +40,5 @@ class UserRemoteDataSourceImpl @Inject constructor(
 
         return result
     }
+
 }

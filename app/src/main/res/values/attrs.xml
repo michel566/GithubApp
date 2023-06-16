@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ErrorLayout">
+        <attr name="backgroundColor_error_layout" format="integer"/>
+        <attr name="itensTint_error_layout" format="integer"/>
+        <attr name="text_error_layout" format="string"/>
+    </declare-styleable>
+
+</resources>
